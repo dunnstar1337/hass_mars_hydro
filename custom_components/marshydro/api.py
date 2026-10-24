@@ -157,7 +157,7 @@ class MarsHydroAPI:
         device_list = await self._process_device_list("WIND")
         if device_list:
             for device_data in device_list:
-                _LOGGER.debug("Fan data retrieved: %s", json.dumps(device_data, indent=2))
+                _LOGGER.info("Fan data retrieved: %s", json.dumps(device_data, indent=2))
                 devices.add {
                     "deviceName": device_data.get("deviceName"),
                     "deviceLightRate": device_data.get("deviceLightRate"),
