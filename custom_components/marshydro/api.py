@@ -158,7 +158,7 @@ class MarsHydroAPI:
         if device_list:
             for device_data in device_list:
                 _LOGGER.info("Fan data retrieved: %s", json.dumps(device_data, indent=2))
-                devices.add {
+                devices.append({
                     "deviceName": device_data.get("deviceName"),
                     "deviceLightRate": device_data.get("deviceLightRate"),
                     "humidity": device_data.get("humidity"),
@@ -167,7 +167,7 @@ class MarsHydroAPI:
                     "isClose": device_data.get("isClose"),
                     "id": device_data.get("id"),
                     "deviceImage": device_data.get("deviceImg"),
-                }
+                })
             return devices[0]
         else:
             _LOGGER.warning("No fan devices found.")
