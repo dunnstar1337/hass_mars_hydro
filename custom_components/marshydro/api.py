@@ -152,23 +152,22 @@ class MarsHydroAPI:
 #            _LOGGER.warning("No fan devices found.")
 #            return None
 
-   async def get_fandata(self):
-        """Retrieve fan data from the Mars Hydro API."""
+    async def get_fandata(self):
+       """Retrieve fan data from the Mars Hydro API."""
         device_list = await self._process_device_list("WIND")
         if device_list:
-            for device_data in device_list:
-                _LOGGER.info("Fan data retrieved: %s", json.dumps(device_data, indent=2))
-                devices.append({
-                    "deviceName": device_data.get("deviceName"),
-                    "deviceLightRate": device_data.get("deviceLightRate"),
-                    "humidity": device_data.get("humidity"),
-                    "temperature": device_data.get("temperature"),
-                    "speed": device_data.get("speed"),
-                    "isClose": device_data.get("isClose"),
-                    "id": device_data.get("id"),
-                    "deviceImage": device_data.get("deviceImg"),
-                })
-            return devices[0]
+            device_data = device_list[0]
+            _LOGGER.debug("Fan data retrieved: %s", json.dumps(device_data, indent=2))
+            return {
+                "deviceName": device_data.get("deviceName"),
+                "deviceLightRate": device_data.get("deviceLightRate"),
+                "humidity": device_data.get("humidity"),
+                "temperature": device_data.get("temperature"),
+                "speed": device_data.get("speed"),
+                "isClose": device_data.get("isClose"),
+                "id": device_data.get("id"),
+                "deviceImage": device_data.get("deviceImg"),
+            }
         else:
             _LOGGER.warning("No fan devices found.")
             return None
