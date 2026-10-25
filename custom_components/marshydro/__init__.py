@@ -48,20 +48,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.warning("Kein Light-Gerät gefunden, Registrierung übersprungen.")
 
     # Fan-Gerät registrieren
-    fan_data = await api.get_fandata()
-    if fan_data:
-        device_registry.async_get_or_create(
-            config_entry_id=entry.entry_id,
-            identifiers={(DOMAIN, fan_data["id"])},
-            manufacturer="Mars Hydro",
-            name=fan_data["deviceName"],
-            model="Mars Hydro Fan",
-        )
-        _LOGGER.info(
-            f"Fan Device {fan_data['deviceName']} wurde erfolgreich registriert."
-        )
-    else:
-        _LOGGER.warning("Kein Fan-Gerät gefunden, Registrierung übersprungen.")
+    fan_data_list = await api.get_fandata()
+    assert isinstance(fan_data_list, object)
+    for fan_data in fan_data_list:
+        if fan_data:
+            device_registry.async_get_or_create(
+                config_entry_id=entry.entry_id,
+                identifiers={(DOMAIN, fan_data["id"])},
+                manufacturer="Mars Hydro",
+                name=fan_data["deviceName"],
+                model="Mars Hydro Fan",
+            )
+            _LOGGER.info(
+                f"Fan Device {fan_data['deviceName']} wurde erfolgreich registriert."
+            )
+        else:
+            _LOGGER.warning("Kein Fan-Gerät gefunden, Registrierung übersprungen.")
 
     # Plattformen laden
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

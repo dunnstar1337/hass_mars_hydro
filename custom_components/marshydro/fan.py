@@ -96,7 +96,8 @@ class MarsHydroFanEntity(FanEntity):
     async def async_update(self):
         """Update the fan state."""
         try:
-            fan_data = await self._api.safe_api_call(self._api.get_fandata)
+            fan_data_list = await self._api.safe_api_call(self._api.get_fandata)
+            fan_data = fan_data_list[0]
             if fan_data:
                 self._device_id = fan_data["id"]
                 self._device_name = fan_data["deviceName"]
