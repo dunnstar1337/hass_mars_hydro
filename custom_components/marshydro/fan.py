@@ -97,30 +97,31 @@ class MarsHydroFanEntity(FanEntity):
         """Update the fan state."""
         try:
             fan_data_list = await self._api.safe_api_call(self._api.get_fandata)
-            fan_data = fan_data_list[0]
-            if fan_data:
-                self._device_id = fan_data["id"]
-                self._device_name = fan_data["deviceName"]
-                raw_speed = fan_data.get(
-                    "deviceLightRate", 25
-                )  # Use deviceLightRate as the default slider value
+            assert isinstance(fan_data_list, list)
+            for fan_data in fan_data_list:
+                if fan_data:
+                    self._device_id = fan_data["id"]
+                    self._device_name = fan_data["deviceName"]
+                    raw_speed = fan_data.get(
+                        "deviceLightRate", 25
+                    )  # Use deviceLightRate as the default slider value
 
-                try:
-                    # Convert speed to integer and clamp it
-                    self._speed_percentage = min(max(int(raw_speed), 25), 100)
-                    self._available = True
-                    _LOGGER.info(
-                        f"Fan state updated: {self._speed_percentage}% for {self._device_name}"
-                    )
-                except ValueError:
-                    _LOGGER.warning(
-                        f"Invalid speed data for fan {self._device_name}: {raw_speed}"
-                    )
-                    self._speed_percentage = None
+                    try:
+                        # Convert speed to integer and clamp it
+                        self._speed_percentage = min(max(int(raw_speed), 25), 100)
+                        self._available = True
+                        _LOGGER.info(
+                            f"Fan state updated: {self._speed_percentage}% for {self._device_name}"
+                        )
+                    except ValueError:
+                        _LOGGER.warning(
+                            f"Invalid speed data for fan {self._device_name}: {raw_speed}"
+                        )
+                        self._speed_percentage = None
+                        self._available = False
+                else:
                     self._available = False
-            else:
-                self._available = False
-                _LOGGER.warning("Could not update fan state.")
+                    _LOGGER.warning("Could not update fan state.")
         except Exception as e:
             self._available = False
             _LOGGER.error(f"Error updating fan state: {e}")

@@ -165,26 +165,27 @@ class MarsHydroFanTemperatureSensor(SensorEntity):
         """Update the fan temperature sensor state."""
         try:
             fan_data_list = await self._api.safe_api_call(self._api.get_fandata)
-            fan_data = fan_data_list[0]
-            if fan_data:
-                self._device_id = fan_data["id"]
-                self._device_name = fan_data["deviceName"]
-                raw_temperature = fan_data["temperature"]
+            assert isinstance(fan_data_list, list)
+            for fan_data in fan_data_list:
+                if fan_data:
+                    self._device_id = fan_data["id"]
+                    self._device_name = fan_data["deviceName"]
+                    raw_temperature = fan_data["temperature"]
 
-                try:
-                    self._temperature = float(raw_temperature)
-                    self._available = True
-                    _LOGGER.info(
-                        f"Fan temperature updated: {self._temperature}°F for {self._device_name}"
-                    )
-                except ValueError:
-                    _LOGGER.warning("Invalid temperature data: %s", raw_temperature)
-                    self._temperature = None
+                    try:
+                        self._temperature = float(raw_temperature)
+                        self._available = True
+                        _LOGGER.info(
+                            f"Fan temperature updated: {self._temperature}°F for {self._device_name}"
+                        )
+                    except ValueError:
+                        _LOGGER.warning("Invalid temperature data: %s", raw_temperature)
+                        self._temperature = None
+                        self._available = False
+                else:
                     self._available = False
-            else:
-                self._available = False
-                self._temperature = None
-                _LOGGER.warning("Could not update fan temperature sensor.")
+                    self._temperature = None
+                    _LOGGER.warning("Could not update fan temperature sensor.")
         except Exception as e:
             self._available = False
             _LOGGER.error(f"Error updating fan temperature sensor: {e}")
@@ -253,28 +254,29 @@ class MarsHydroFanTemperatureCelsiusSensor(SensorEntity):
         """Update the fan temperature in Celsius."""
         try:
             fan_data_list = await self._api.safe_api_call(self._api.get_fandata)
-            fan_data = fan_data_list[0]
-            if fan_data:
-                self._device_id = fan_data["id"]
-                self._device_name = fan_data["deviceName"]
-                raw_temperature = fan_data["temperature"]
+            assert isinstance(fan_data_list, list)
+            for fan_data in fan_data_list:
+                if fan_data:
+                    self._device_id = fan_data["id"]
+                    self._device_name = fan_data["deviceName"]
+                    raw_temperature = fan_data["temperature"]
 
-                try:
-                    self._temperature_celsius = round(
-                        (float(raw_temperature) - 32) * 5 / 9, 1
-                    )
-                    self._available = True
-                    _LOGGER.info(
-                        f"Fan temperature updated: {self._temperature_celsius}°C for {self._device_name}"
-                    )
-                except ValueError:
-                    _LOGGER.warning("Invalid temperature data: %s", raw_temperature)
-                    self._temperature_celsius = None
+                    try:
+                        self._temperature_celsius = round(
+                            (float(raw_temperature) - 32) * 5 / 9, 1
+                        )
+                        self._available = True
+                        _LOGGER.info(
+                            f"Fan temperature updated: {self._temperature_celsius}°C for {self._device_name}"
+                        )
+                    except ValueError:
+                        _LOGGER.warning("Invalid temperature data: %s", raw_temperature)
+                        self._temperature_celsius = None
+                        self._available = False
+                else:
                     self._available = False
-            else:
-                self._available = False
-                self._temperature_celsius = None
-                _LOGGER.warning("Could not update fan temperature (Celsius) sensor.")
+                    self._temperature_celsius = None
+                    _LOGGER.warning("Could not update fan temperature (Celsius) sensor.")
         except Exception as e:
             self._available = False
             _LOGGER.error(f"Error updating fan temperature (Celsius) sensor: {e}")
@@ -341,26 +343,27 @@ class MarsHydroFanHumiditySensor(SensorEntity):
         """Update the fan humidity sensor state."""
         try:
             fan_data_list = await self._api.safe_api_call(self._api.get_fandata)
-            fan_data = fan_data_list[0]
-            if fan_data:
-                self._device_id = fan_data["id"]
-                self._device_name = fan_data["deviceName"]
-                raw_humidity = fan_data["humidity"]
+            assert isinstance(fan_data_list, list)
+            for fan_data in fan_data_list:
+                if fan_data:
+                    self._device_id = fan_data["id"]
+                    self._device_name = fan_data["deviceName"]
+                    raw_humidity = fan_data["humidity"]
 
-                try:
-                    self._humidity = float(raw_humidity)
-                    self._available = True
-                    _LOGGER.info(
-                        f"Fan humidity updated: {self._humidity}% for {self._device_name}"
-                    )
-                except ValueError:
-                    _LOGGER.warning("Invalid humidity data: %s", raw_humidity)
-                    self._humidity = None
+                    try:
+                        self._humidity = float(raw_humidity)
+                        self._available = True
+                        _LOGGER.info(
+                            f"Fan humidity updated: {self._humidity}% for {self._device_name}"
+                        )
+                    except ValueError:
+                        _LOGGER.warning("Invalid humidity data: %s", raw_humidity)
+                        self._humidity = None
+                        self._available = False
+                else:
                     self._available = False
-            else:
-                self._available = False
-                self._humidity = None
-                _LOGGER.warning("Could not update fan humidity sensor.")
+                    self._humidity = None
+                    _LOGGER.warning("Could not update fan humidity sensor.")
         except Exception as e:
             self._available = False
             _LOGGER.error(f"Error updating fan humidity sensor: {e}")
@@ -427,26 +430,27 @@ class MarsHydroFanSpeedSensor(SensorEntity):
         """Update the fan speed sensor state."""
         try:
             fan_data_list = await self._api.safe_api_call(self._api.get_fandata)
-            fan_data = fan_data_list[0]
-            if fan_data:
-                self._device_id = fan_data["id"]
-                self._device_name = fan_data["deviceName"]
-                raw_speed = fan_data.get("speed")
+            assert isinstance(fan_data_list, list)
+            for fan_data in fan_data_list:
+                if fan_data:
+                    self._device_id = fan_data["id"]
+                    self._device_name = fan_data["deviceName"]
+                    raw_speed = fan_data.get("speed")
 
-                try:
-                    self._speed = int(raw_speed)
-                    self._available = True
-                    _LOGGER.info(
-                        f"Fan speed updated: {self._speed} RPM for {self._device_name}"
-                    )
-                except ValueError:
-                    _LOGGER.warning("Invalid speed data: %s", raw_speed)
-                    self._speed = None
+                    try:
+                        self._speed = int(raw_speed)
+                        self._available = True
+                        _LOGGER.info(
+                            f"Fan speed updated: {self._speed} RPM for {self._device_name}"
+                        )
+                    except ValueError:
+                        _LOGGER.warning("Invalid speed data: %s", raw_speed)
+                        self._speed = None
+                        self._available = False
+                else:
                     self._available = False
-            else:
-                self._available = False
-                self._speed = None
-                _LOGGER.warning("Could not update fan speed sensor.")
+                    self._speed = None
+                    _LOGGER.warning("Could not update fan speed sensor.")
         except Exception as e:
             self._available = False
             _LOGGER.error(f"Error updating fan speed sensor: {e}")

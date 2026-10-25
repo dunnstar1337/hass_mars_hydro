@@ -49,7 +49,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Fan-Gerät registrieren
     fan_data_list = await api.get_fandata()
-    assert isinstance(fan_data_list, object)
+    assert isinstance(fan_data_list, list)
     for fan_data in fan_data_list:
         if fan_data:
             device_registry.async_get_or_create(
