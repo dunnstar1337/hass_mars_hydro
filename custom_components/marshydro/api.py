@@ -138,7 +138,7 @@ class MarsHydroAPI:
         device_list = await self._process_device_list("WIND")
         if device_list:
             for device in device_list:
-                _LOGGER.debug("Fan data retrieved: %s", json.dumps(device, indent=2))
+                _LOGGER.info("Fan data retrieved: %s", json.dumps(device, indent=2))
                 device_data_set = {
                     "deviceName": device.get("deviceName"),
                     "deviceLightRate": device.get("deviceLightRate"),
@@ -150,6 +150,7 @@ class MarsHydroAPI:
                     "deviceImage": device.get("deviceImg"),
                 }
                 devices.extend(device_data_set)
+            _LOGGER.info("Fan data retrieved: %s", json.dumps(devices, indent=2))
             return devices
         else:
             _LOGGER.warning("No fan devices found.")
