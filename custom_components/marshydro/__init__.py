@@ -48,9 +48,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.warning("Kein Light-Gerät gefunden, Registrierung übersprungen.")
 
     # Fan-Gerät registrieren
-    fan_data_list = await api.get_fandata_list()
-    assert isinstance(fan_data_list, list)
-    for fan_data in fan_data_list:
+    device_list = await api.get_fandata_list()
+    for device in device_list:
+        _LOGGER.info("Fan data retrieved: %s", json.dumps(device, indent=2))
+        fan_data = {
+            "deviceName": device.get("deviceName"),
+            "deviceLightRate": device.get("deviceLightRate"),
+            "humidity": device.get("humidity"),
+            "temperature": device.get("temperature"),
+            "speed": device.get("speed"),
+            "isClose": device.get("isClose"),
+            "id": device.get("id"),
+            "deviceImage": device.get("deviceImg"),
+        }
         if fan_data:
             device_registry.async_get_or_create(
                 config_entry_id=entry.entry_id,

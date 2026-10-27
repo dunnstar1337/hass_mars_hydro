@@ -134,24 +134,10 @@ class MarsHydroAPI:
 
     async def get_fandata_list(self):
         """Retrieve fan data from the Mars Hydro API."""
-        devices = list()
         device_list = await self._process_device_list("WIND")
         if device_list:
-            for device in device_list:
-                _LOGGER.info("Fan data retrieved: %s", json.dumps(device, indent=2))
-                device_data_set = {
-                    "deviceName": device.get("deviceName"),
-                    "deviceLightRate": device.get("deviceLightRate"),
-                    "humidity": device.get("humidity"),
-                    "temperature": device.get("temperature"),
-                    "speed": device.get("speed"),
-                    "isClose": device.get("isClose"),
-                    "id": device.get("id"),
-                    "deviceImage": device.get("deviceImg"),
-                }
-                devices.extend(set(device_data_set))
-            _LOGGER.info("Fan data retrieved: %s", json.dumps(devices, indent=2))
-            return devices
+            _LOGGER.info("Fan data list retrieved: %s", json.dumps(device_list, indent=2))
+            return device_list
         else:
             _LOGGER.warning("No fan devices found.")
             return None
