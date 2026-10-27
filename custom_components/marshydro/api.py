@@ -146,9 +146,11 @@ class MarsHydroAPI:
         """Retrieve fan data from the Mars Hydro API."""
         device_list = await self._process_device_list("WIND")
         if device_list:
+            _LOGGER.info("Fan data retrieved for ID: %s", id)
+            _LOGGER.info("Fan data retrieved: %s", json.dumps(device_list, indent=2))
             for device in device_list:
                 if device.get("id") == id:
-                    _LOGGER.debug("Fan data retrieved: %s", json.dumps(device, indent=2))
+                    _LOGGER.info("Fan data retrieved: %s", json.dumps(device, indent=2))
                     device = {
                         "deviceName": device.get("deviceName"),
                         "deviceLightRate": device.get("deviceLightRate"),
