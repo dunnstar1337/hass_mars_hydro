@@ -4,6 +4,7 @@ from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers import device_registry as dr
 from .const import DOMAIN
 import logging
+import json
 from .api import MarsHydroAPI
 
 _LOGGER = logging.getLogger(__name__)
