@@ -112,7 +112,7 @@ class MarsHydroSwitch(SwitchEntity):
             device_data = await self._api.safe_api_call(
                 self._api.get_lightdata
                 if self._device_type == "LIGHT"
-                else self._api.get_fandata
+                else self._api.get_fandata_byID(self._device_id)
             )
             if device_data:
                 self._device_id = device_data["id"]  # Set device_id dynamically
