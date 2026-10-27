@@ -67,7 +67,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 config_entry_id=entry.entry_id,
                 identifiers={(DOMAIN, fan_data["id"])},
                 manufacturer="Mars Hydro",
-                name=fan_data["deviceName"] + "_" + fan_data["id"],
+                name=f"{fan_data["deviceName"]}_{fan_data["id"]}",
                 model="Mars Hydro Fan",
             )
             _LOGGER.info(
