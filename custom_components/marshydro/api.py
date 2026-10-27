@@ -149,7 +149,7 @@ class MarsHydroAPI:
                     "id": device.get("id"),
                     "deviceImage": device.get("deviceImg"),
                 }
-                devices.extend(device_data_set)
+                devices.extend(set(device_data_set))
             _LOGGER.info("Fan data retrieved: %s", json.dumps(devices, indent=2))
             return devices
         else:
