@@ -134,7 +134,7 @@ class MarsHydroAPI:
 
     async def get_fandata_list(self):
         """Retrieve fan data from the Mars Hydro API."""
-        devices = set((None))
+        devices = set()
         device_list = await self._process_device_list("WIND")
         if device_list:
             for device in device_list:
