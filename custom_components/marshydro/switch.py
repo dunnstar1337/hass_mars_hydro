@@ -9,7 +9,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     if api:
         device_list = await api.get_fandata_list()
         entities = set()
-        light_switch = MarsHydroSwitch(api, entry.entry_id,None, device_type="LIGHT")
+        light_switch = MarsHydroSwitch(api, entry.entry_id,None,None, device_type="LIGHT")
         entities.add(light_switch)
         for device in device_list:
             entities.add(MarsHydroSwitch(api, entry.entry_id, device.get("id"), device.get("deviceName"), device_type="WIND"))
@@ -117,7 +117,7 @@ class MarsHydroSwitch(SwitchEntity):
             device_data = await self._api.safe_api_call(
                 self._api.get_lightdata
                 if self._device_type == "LIGHT"
-                else self._api.get_fandata_byID(self._device_id)
+                else self._api.get_fandata_by_id(self._device_id)
             )
             if device_data:
                 self._device_id = device_data["id"]  # Set device_id dynamically

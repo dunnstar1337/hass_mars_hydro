@@ -168,7 +168,7 @@ class MarsHydroFanTemperatureSensor(SensorEntity):
     async def async_update(self):
         """Update the fan temperature sensor state."""
         try:
-            fan_data = await self._api.safe_api_call(self._api.get_fandata_byID(self._device_id))
+            fan_data = await self._api.safe_api_call(self._api.get_fandata_by_id(self._device_id))
             if fan_data:
                 self._device_id = fan_data["id"]
                 self._device_name = fan_data["deviceName"]
@@ -254,7 +254,7 @@ class MarsHydroFanTemperatureCelsiusSensor(SensorEntity):
     async def async_update(self):
         """Update the fan temperature in Celsius."""
         try:
-            fan_data = await self._api.safe_api_call(self._api.get_fandata_byID(self._device_id))
+            fan_data = await self._api.safe_api_call(self._api.get_fandata_by_id(self._device_id))
             if fan_data:
                 self._device_id = fan_data["id"]
                 self._device_name = fan_data["deviceName"]
@@ -341,7 +341,7 @@ class MarsHydroFanHumiditySensor(SensorEntity):
     async def async_update(self):
         """Update the fan humidity sensor state."""
         try:
-            fan_data = await self._api.safe_api_call(self._api.get_fandata_byID(self._device_id))
+            fan_data = await self._api.safe_api_call(self._api.get_fandata_by_id(self._device_id))
             if fan_data:
                 self._device_id = fan_data["id"]
                 self._device_name = fan_data["deviceName"]
@@ -426,7 +426,7 @@ class MarsHydroFanSpeedSensor(SensorEntity):
     async def async_update(self):
         """Update the fan speed sensor state."""
         try:
-            fan_data = await self._api.safe_api_call(self._api.get_fandata_byID(self._device_id))
+            fan_data = await self._api.safe_api_call(self._api.get_fandata_by_id(self._device_id))
             if fan_data:
                 self._device_id = fan_data["id"]
                 self._device_name = fan_data["deviceName"]

@@ -142,7 +142,7 @@ class MarsHydroAPI:
             _LOGGER.warning("No fan devices found.")
             return None
 
-    async def get_fandata_byID(self,id):
+    async def get_fandata_by_id(self,id: int):
         """Retrieve fan data from the Mars Hydro API."""
         _LOGGER.info("Start retrieving Fan data for ID: %s", id)
         device_list = await self._process_device_list("WIND")
