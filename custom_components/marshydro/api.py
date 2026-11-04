@@ -144,6 +144,7 @@ class MarsHydroAPI:
 
     async def get_fandata_byID(self,id):
         """Retrieve fan data from the Mars Hydro API."""
+        _LOGGER.info("Start retrieving Fan data for ID: %s", id)
         device_list = await self._process_device_list("WIND")
         if device_list:
             _LOGGER.info("Fan data retrieved for ID: %s", id)
