@@ -1,8 +1,6 @@
 from homeassistant.components.fan import FanEntity, FanEntityFeature
 from . import _LOGGER, DOMAIN
 
-logging.basicConfig(level=logging.DEBUG)
-
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the Mars Hydro fan entity."""
     api = hass.data[DOMAIN][entry.entry_id].get("api")

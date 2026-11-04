@@ -1,8 +1,6 @@
 from homeassistant.components.light import LightEntity, ATTR_BRIGHTNESS
 from . import _LOGGER, DOMAIN
 
-logging.basicConfig(level=logging.DEBUG)
-
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the Mars Hydro Light entity."""
     _LOGGER.debug("Mars Hydro Light async_setup_entry called")

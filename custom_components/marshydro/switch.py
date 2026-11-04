@@ -1,8 +1,6 @@
 from homeassistant.components.switch import SwitchEntity
 from . import _LOGGER, DOMAIN
 
-logging.basicConfig(level=logging.DEBUG)
-
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the switch platform."""
     api = hass.data[DOMAIN][entry.entry_id].get("api")
