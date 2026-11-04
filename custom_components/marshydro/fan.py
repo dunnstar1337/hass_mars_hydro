@@ -10,7 +10,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         fan_entities = set()
         for device in device_list:
             fan_entities.add(MarsHydroFanEntity(api, entry.entry_id, device.get("id"), device.get("deviceName")))
-        async_add_entities(fan_entities, update_before_add=True)
+        async_add_entities(fan_entities, update_before_add=False)
         _LOGGER.info(f"Mars Hydro fan {entry.entry_id} entity added successfully.")
     else:
         _LOGGER.error("API instance not found. Cannot set up fan entity.")

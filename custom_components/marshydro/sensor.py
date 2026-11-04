@@ -26,7 +26,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
         async_add_entities(
             fan_entities,
-            update_before_add=True,
+            update_before_add=False,
         )
 
 

@@ -13,7 +13,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         for device in device_list:
             entities.add(MarsHydroSwitch(api, entry.entry_id, device.get("id"), device.get("deviceName"), device_type="WIND"))
 
-        async_add_entities(entities, update_before_add=True)
+        async_add_entities(entities, update_before_add=False)
 
 
 class MarsHydroSwitch(SwitchEntity):
