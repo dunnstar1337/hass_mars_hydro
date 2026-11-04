@@ -1,6 +1,7 @@
 from homeassistant.components.sensor import SensorEntity
 from . import _LOGGER, DOMAIN
 
+logging.basicConfig(level=logging.DEBUG)
 
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the Mars Hydro sensors."""

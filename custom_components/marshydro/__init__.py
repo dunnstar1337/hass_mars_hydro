@@ -7,6 +7,8 @@ import logging
 import json
 from .api import MarsHydroAPI
 
+logging.basicConfig(level=logging.DEBUG)
+
 _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS = ["sensor", "light", "switch", "fan"]  # Sensor hinzugefügt
