@@ -7,8 +7,11 @@ async def async_setup_entry(hass, entry, async_add_entities):
     api = hass.data[DOMAIN][entry.entry_id].get("api")
 
     if api:
-        fan_entity = MarsHydroFanEntity(api, entry.entry_id)
-        async_add_entities([fan_entity], update_before_add=True)
+        device_list = await api.get_fandata_list()
+        fan_entities = set()
+        for device in device_list:
+            fan_entities.add(MarsHydroFanEntity(api, entry.entry_id, device.get("id"), device.get("deviceName")))
+        async_add_entities(fan_entities, update_before_add=True)
         _LOGGER.info(f"Mars Hydro fan {entry.entry_id} entity added successfully.")
     else:
         _LOGGER.error("API instance not found. Cannot set up fan entity.")
@@ -17,10 +20,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
 class MarsHydroFanEntity(FanEntity):
     """Representation of a Mars Hydro fan."""
 
-    def __init__(self, api, entry_id):
+    def __init__(self, api, entry_id, device_id, device_name):
         self._api = api
-        self._device_id = None
-        self._device_name = None
+        self._device_id = device_id
+        self._device_name = device_name
         self._speed_percentage = None
         self._available = True
         self._entry_id = entry_id

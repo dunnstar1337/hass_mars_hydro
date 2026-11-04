@@ -7,18 +7,23 @@ async def async_setup_entry(hass, entry, async_add_entities):
     api = hass.data[DOMAIN][entry.entry_id].get("api")
 
     if api:
-        light_switch = MarsHydroSwitch(api, entry.entry_id, device_type="LIGHT")
-        fan_switch = MarsHydroSwitch(api, entry.entry_id, device_type="WIND")
-        async_add_entities([light_switch, fan_switch], update_before_add=True)
+        device_list = await api.get_fandata_list()
+        entities = set()
+        light_switch = MarsHydroSwitch(api, entry.entry_id,None, device_type="LIGHT")
+        entities.add(light_switch)
+        for device in device_list:
+            entities.add(MarsHydroSwitch(api, entry.entry_id, device.get("id"), device.get("deviceName"), device_type="WIND"))
+
+        async_add_entities(entities, update_before_add=True)
 
 
 class MarsHydroSwitch(SwitchEntity):
     """Representation of a Mars Hydro switch."""
 
-    def __init__(self, api, entry_id, device_type):
+    def __init__(self, api, entry_id, device_id, device_name, device_type):
         self._api = api
-        self._device_id = None  # To store the dynamic device_id
-        self._device_name = None  # To store the dynamic deviceName
+        self._device_id = device_id  # To store the dynamic device_id
+        self._device_name = device_name  # To store the dynamic deviceName
         self._state = None
         self._available = True
         self._entry_id = entry_id

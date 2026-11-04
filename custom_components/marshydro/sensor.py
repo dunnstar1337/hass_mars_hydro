@@ -9,20 +9,24 @@ async def async_setup_entry(hass, entry, async_add_entities):
     if api:
         # Create all sensors
         brightness_sensor = MarsHydroBrightnessSensor(api, entry.entry_id)
-        fan_temperature_sensor = MarsHydroFanTemperatureSensor(api, entry.entry_id)
-        fan_temperature_celsius_sensor = MarsHydroFanTemperatureCelsiusSensor(
-            api, entry.entry_id
-        )
-        fan_humidity_sensor = MarsHydroFanHumiditySensor(api, entry.entry_id)
-        fan_speed_sensor = MarsHydroFanSpeedSensor(api, entry.entry_id)
         async_add_entities(
             [
                 brightness_sensor,
-                fan_temperature_sensor,
-                fan_temperature_celsius_sensor,
-                fan_humidity_sensor,
-                fan_speed_sensor,
             ],
+            update_before_add=True,
+        )
+
+        device_list = await api.get_fandata_list()
+        fan_entities = set()
+        for device in device_list:
+            fan_entities.add(MarsHydroFanTemperatureSensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
+            fan_entities.add(MarsHydroFanTemperatureCelsiusSensor(
+                api, entry.entry_id, device.get("id"), device.get("deviceName")))
+            fan_entities.add(MarsHydroFanHumiditySensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
+            fan_entities.add(MarsHydroFanSpeedSensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
+
+        async_add_entities(
+            fan_entities,
             update_before_add=True,
         )
 
@@ -107,10 +111,10 @@ class MarsHydroBrightnessSensor(SensorEntity):
 class MarsHydroFanTemperatureSensor(SensorEntity):
     """Representation of the Mars Hydro fan temperature sensor."""
 
-    def __init__(self, api, entry_id):
+    def __init__(self, api, entry_id, device_id, device_name):
         self._api = api
-        self._device_id = None
-        self._device_name = None
+        self._device_id = device_id
+        self._device_name = device_name
         self._temperature = None
         self._available = True
         self._entry_id = entry_id
@@ -191,10 +195,10 @@ class MarsHydroFanTemperatureSensor(SensorEntity):
 class MarsHydroFanTemperatureCelsiusSensor(SensorEntity):
     """Representation of the Mars Hydro fan temperature sensor in Celsius."""
 
-    def __init__(self, api, entry_id):
+    def __init__(self, api, entry_id, device_id, device_name):
         self._api = api
-        self._device_id = None
-        self._device_name = None
+        self._device_id = device_id
+        self._device_name = device_name
         self._temperature_celsius = None
         self._available = True
         self._entry_id = entry_id
@@ -280,10 +284,10 @@ class MarsHydroFanTemperatureCelsiusSensor(SensorEntity):
 class MarsHydroFanHumiditySensor(SensorEntity):
     """Representation of the Mars Hydro fan humidity sensor."""
 
-    def __init__(self, api, entry_id):
+    def __init__(self, api, entry_id, device_id, device_name):
         self._api = api
-        self._device_id = None
-        self._device_name = None
+        self._device_id = device_id
+        self._device_name = device_name
         self._humidity = None
         self._available = True
         self._entry_id = entry_id
@@ -365,10 +369,10 @@ class MarsHydroFanHumiditySensor(SensorEntity):
 class MarsHydroFanSpeedSensor(SensorEntity):
     """Representation of the Mars Hydro fan speed sensor."""
 
-    def __init__(self, api, entry_id):
+    def __init__(self, api, entry_id, device_id, device_name):
         self._api = api
-        self._device_id = None
-        self._device_name = None
+        self._device_id = device_id
+        self._device_name = device_name
         self._speed = None
         self._available = True
         self._entry_id = entry_id
