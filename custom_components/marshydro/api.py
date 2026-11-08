@@ -18,6 +18,7 @@ class MarsHydroAPI:
         self.last_login_time = 0
         self.login_interval = 300  # Minimum interval between logins in seconds
         self.device_id = None  # Added device_id attribute to store dynamically
+        self.device_list_wind = None
 
     async def login(self):
         """Authenticate and retrieve the token."""
@@ -135,10 +136,10 @@ class MarsHydroAPI:
 
     async def get_fandata_list(self):
         """Retrieve fan data from the Mars Hydro API."""
-        device_list = await self._process_device_list("WIND")
+        self.device_list_wind = await self._process_device_list("WIND")
         if device_list:
-            _LOGGER.info("Fan data list retrieved: %s", json.dumps(device_list, indent=2))
-            return device_list
+            _LOGGER.info("Fan data list retrieved: %s", json.dumps(self.device_list_wind, indent=2))
+            return self.device_list_wind
         else:
             _LOGGER.warning("No fan devices found.")
             return None
@@ -146,11 +147,15 @@ class MarsHydroAPI:
     async def get_fandata_by_id(self,id: int):
         """Retrieve fan data from the Mars Hydro API."""
         _LOGGER.info("Start retrieving Fan data for ID: %s", id)
-        device_list = await self._process_device_list("WIND")
+        """device_list = await self._process_device_list("WIND")"""
+        if self.device_list_wind:
+            device_list = self.device_list_wind
+        else:
+            device_list = await self.get_fandata_list()
         if device_list:
             _LOGGER.info("Fan data retrieved for ID: %s", id)
             _LOGGER.info("Fan data retrieved: %s", json.dumps(device_list, indent=2))
-            for device in device_list:
+            for device in self.device_list:
                 if device.get("id") == id:
                     device = {
                         "deviceName": device.get("deviceName"),
