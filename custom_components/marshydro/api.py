@@ -137,7 +137,7 @@ class MarsHydroAPI:
     async def get_fandata_list(self):
         """Retrieve fan data from the Mars Hydro API."""
         self.device_list_wind = await self._process_device_list("WIND")
-        if device_list:
+        if self.device_list_wind:
             _LOGGER.info("Fan data list retrieved: %s", json.dumps(self.device_list_wind, indent=2))
             return self.device_list_wind
         else:
@@ -148,6 +148,7 @@ class MarsHydroAPI:
         """Retrieve fan data from the Mars Hydro API."""
         _LOGGER.info("Start retrieving Fan data for ID: %s", id)
         """device_list = await self._process_device_list("WIND")"""
+
         if self.device_list_wind:
             device_list = self.device_list_wind
         else:
