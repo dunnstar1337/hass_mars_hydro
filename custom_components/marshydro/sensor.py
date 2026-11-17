@@ -3,6 +3,9 @@ from . import _LOGGER, DOMAIN
 
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the Mars Hydro sensors."""
+    def add_entity(entity):
+        async_add_entities([entity], update_before_add=True)
+
     api = hass.data[DOMAIN][entry.entry_id].get("api")
 
     if api:
@@ -16,18 +19,12 @@ async def async_setup_entry(hass, entry, async_add_entities):
         )
 
         device_list = await api.get_fandata_list()
-        fan_entities = set()
         for device in device_list:
-            fan_entities.add(MarsHydroFanTemperatureSensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
-            fan_entities.add(MarsHydroFanTemperatureCelsiusSensor(
+            add_entity(MarsHydroFanTemperatureSensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
+            add_entity(MarsHydroFanTemperatureCelsiusSensor(
                 api, entry.entry_id, device.get("id"), device.get("deviceName")))
-            fan_entities.add(MarsHydroFanHumiditySensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
-            fan_entities.add(MarsHydroFanSpeedSensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
-
-        async_add_entities(
-            fan_entities,
-            update_before_add=False,
-        )
+            add_entity(MarsHydroFanHumiditySensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
+            add_entity(MarsHydroFanSpeedSensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
 
 
 class MarsHydroBrightnessSensor(SensorEntity):
