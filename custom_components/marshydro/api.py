@@ -149,10 +149,11 @@ class MarsHydroAPI:
         _LOGGER.info("Start retrieving Fan data for ID: %s", fan_device_id)
         """device_list = await self._process_device_list("WIND")"""
 
-        if self.device_list_wind:
-            device_list = self.device_list_wind
-        else:
-            device_list = await self.get_fandata_list()
+#        if self.device_list_wind:
+#            device_list = self.device_list_wind
+#        else:
+#            device_list = await self.get_fandata_list()
+        device_list = await self.get_fandata_list()
         if device_list:
             _LOGGER.info("Fan data retrieved for ID: %s", fan_device_id)
             _LOGGER.info("Fan data retrieved: %s", json.dumps(device_list, indent=2))

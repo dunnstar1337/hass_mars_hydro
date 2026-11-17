@@ -20,11 +20,18 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
         device_list = await api.get_fandata_list()
         for device in device_list:
-            add_entity(MarsHydroFanTemperatureSensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
-            add_entity(MarsHydroFanTemperatureCelsiusSensor(
-                api, entry.entry_id, device.get("id"), device.get("deviceName")))
-            add_entity(MarsHydroFanHumiditySensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
-            add_entity(MarsHydroFanSpeedSensor(api, entry.entry_id, device.get("id"), device.get("deviceName")))
+            temperature_sensor = MarsHydroFanTemperatureSensor(api, entry.entry_id, device.get("id"), device.get("deviceName"))
+            temperature_celsius_sensor = MarsHydroFanTemperatureCelsiusSensor(
+                api, entry.entry_id, device.get("id"), device.get("deviceName"))
+            humidity_sensor = MarsHydroFanHumiditySensor(api, entry.entry_id, device.get("id"), device.get("deviceName"))
+            fan_speed_sensor = MarsHydroFanSpeedSensor(api, entry.entry_id, device.get("id"), device.get("deviceName"))
+
+            async_add_entities(
+                [
+                    temperature_sensor, temperature_celsius_sensor, humidity_sensor, fan_speed_sensor,
+                ],
+                update_before_add=True,
+            )
 
 
 class MarsHydroBrightnessSensor(SensorEntity):
